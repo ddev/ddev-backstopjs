@@ -97,6 +97,8 @@ The entrypoint is responsible for:
 
 ### How to add additional hostnames?
 
+**Note** Since ddev v1.24.10 https://github.com/ddev/ddev/releases/tag/v1.24.10 you do not need to add external_links anymore! 
+
 If you want to test hosts not configured in the web container, you need to use external_links in the service containers. 
 For that add a file `docker-compose.external_links.yaml` to your project which should look like this:
 
