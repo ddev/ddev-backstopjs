@@ -1,4 +1,4 @@
-name: ddev-backstopjs
+name: backstopjs
 
 pre_install_actions:
   - test -d ${DDEV_APPROOT}/tests/backstop || mkdir -p ${DDEV_APPROOT}/tests/backstop
@@ -11,9 +11,9 @@ pre_install_actions:
 # if it hasn't been modified by the user.
 # DDEV environment variables can be interpolated into these filenames
 project_files:
-- docker-compose.backstop.yaml
+- docker-compose.backstopjs.yaml
 - backstopBuild/
-- commands/backstop/backstop
+- commands/backstopjs/backstop
 - commands/host/backstop-results
 
 post_install_actions:
