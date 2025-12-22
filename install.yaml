@@ -1,6 +1,7 @@
-name: ddev-backstopjs
+name: backstopjs
 
 pre_install_actions:
+  - test -d .ddev/backstopBuild && ddev add-on remove ddev-backstopjs || exit 0
   - test -d ${DDEV_APPROOT}/tests/backstop || mkdir -p ${DDEV_APPROOT}/tests/backstop
   - test -f "${DDEV_APPROOT}/tests/backstop/.gitignore" || printf "## ddev-generated\n**/bitmaps_test\n**/html_report\n" > ${DDEV_APPROOT}/tests/backstop/.gitignore
   - grep -q "## ddev-generated" ${DDEV_APPROOT}/tests/backstop/.gitignore && printf "## ddev-generated\n**/bitmaps_test\n**/html_report\n" > ${DDEV_APPROOT}/tests/backstop/.gitignore || true
@@ -11,9 +12,9 @@ pre_install_actions:
 # if it hasn't been modified by the user.
 # DDEV environment variables can be interpolated into these filenames
 project_files:
-- docker-compose.backstop.yaml
-- backstopBuild/
-- commands/backstop/backstop
+- docker-compose.backstopjs.yaml
+- backstopjs-build/
+- commands/backstopjs/backstop
 - commands/host/backstop-results
 
 post_install_actions:
