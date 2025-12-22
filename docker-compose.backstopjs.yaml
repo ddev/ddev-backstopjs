@@ -8,7 +8,7 @@ services:
     # name convention used in the main docker-compose.yml file.
     container_name: ddev-${DDEV_SITENAME}-backstopjs
     build:
-      context: './backstopBuild'
+      context: './backstopjs-build'
       args:
         BASE_IMAGE: backstopjs/backstopjs:6.3.25
         username: $USER
