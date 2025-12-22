@@ -81,8 +81,8 @@ open tests/backstop/backstop_data/_mytestproject_/html_report/index.html
 
 ## Changes to the original docker image
 
-The backstopjs docker image is extended with some functions using a custom docker build, see [Dockerfile](backstopBuild/Dockerfile)
-and uses a custom [entrypoint](backstopBuild/entrypoint.sh).
+The backstopjs docker image is extended with some functions using a custom docker build, see [Dockerfile](backstopjs-build/Dockerfile)
+and uses a custom [entrypoint](backstopjs-build/entrypoint.sh).
 
 In the Dockerfile the following is added/changed:
 
@@ -118,7 +118,7 @@ See: [ddev FAQ: Can different projects communicate with each other?](https://dde
 Per default the backstop directory containing backstop config etc. is expected in your project directory (besides the
 .ddev folder) in the directory *tests/backstop*.
 
-If you want to change that edit the file [docker-compose.backstop.yaml](docker-compose.backstop.yaml) and
+If you want to change that edit the file [docker-compose.backstopjs.yaml](docker-compose.backstopjs.yaml) and
 change the line in volumes to the path you want to use, move the files to the new directory and restart ddev.
 
 Make sure to remove the #ddev-generated line from the file to prevent ddev from making changes to it.
