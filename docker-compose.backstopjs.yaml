@@ -21,7 +21,7 @@ services:
     init: true
     entrypoint: [ /entrypoint.sh ]
     volumes:
-      - ../tests/backstop:/src
+      - ../${BACKSTOPJS_TESTDIR}:/src
       - .:/mnt/ddev_config:ro
     shm_size: 1gb
     environment:
