@@ -15,7 +15,7 @@ pre_install_actions:
 project_files:
 - docker-compose.backstopjs.yaml
 - backstopjs-build/
-- commands/backstopjs/backstop
+- commands/backstopjs/
 - commands/host/backstop-results
 
 post_install_actions:
