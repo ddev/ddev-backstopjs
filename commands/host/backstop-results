@@ -6,14 +6,17 @@
 ## Usage: backstop-results
 ## Example: "ddev backstop-results"
 
+# shellcheck source=../../.env.backstopjs
+source .ddev/.env.backstopjs
+
 case $OSTYPE in
   linux-gnu)
-    xdg-open ${DDEV_APPROOT}/tests/backstop/backstop_data/html_report/index.html
+    xdg-open "${DDEV_APPROOT}/${BACKSTOPJS_TESTDIR}/backstop_data/html_report/index.html"
     ;;
   "darwin"*)
-    open ${DDEV_APPROOT}/tests/backstop/backstop_data/html_report/index.html
+    open "${DDEV_APPROOT}/${BACKSTOPJS_TESTDIR}/backstop_data/html_report/index.html"
     ;;
   "win*"* | "msys"*)
-    start ${DDEV_APPROOT}/tests/backstop/backstop_data/html_report/index.html
+    start "${DDEV_APPROOT}/${BACKSTOPJS_TESTDIR}/backstop_data/html_report/index.html"
     ;;
 esac

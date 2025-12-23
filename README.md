@@ -81,12 +81,13 @@ open tests/backstop/backstop_data/_mytestproject_/html_report/index.html
 
 ## Changes to the original docker image
 
-The backstopjs docker image is extended with some functions using a custom docker build, see [Dockerfile](backstopBuild/Dockerfile)
-and uses a custom [entrypoint](backstopBuild/entrypoint.sh).
+The backstopjs docker image is extended with some functions using a custom docker build, see [Dockerfile](backstopjs-build/Dockerfile)
+and uses a custom [entrypoint](backstopjs-build/entrypoint.sh).
 
 In the Dockerfile the following is added/changed:
 
 - add the custom entrypoint.sh to the image
+- add custom healthcheck.sh to the image for addressing possible permissions issues when changing the test directory
 - delete the default 'node' user with uid 1000 and add current ddev user
 - install the [minimist](https://www.npmjs.com/package/minimist) npm package globally. This is not needed by default
   but very handy to parse command line args for more complex custom backstopjs configs.
@@ -95,6 +96,10 @@ The entrypoint is responsible for:
 
 - add /etc/hosts entries for all hosts configured in the ddev web container automatically
 - add sleep command to keep the container running
+
+The healthcheck is responsible for:
+- confirming file ownership for /src is set to the container user
+- optionally, repairing ownership issues (enabled by default)
 
 ## Advanced
 
@@ -115,10 +120,11 @@ See: [ddev FAQ: Can different projects communicate with each other?](https://dde
 
 
 ### Change backstop tests directory
-Per default the backstop directory containing backstop config etc. is expected in your project directory (besides the
-.ddev folder) in the directory *tests/backstop*.
+The test directory is now managed via custom [environment variables](https://docs.ddev.com/en/stable/users/extend/customization-extendibility/#environment-variables-for-containers-and-services) only visible to host and container that can be saved into your project and shared with other developers.
 
-If you want to change that edit the file [docker-compose.backstop.yaml](docker-compose.backstop.yaml) and
-change the line in volumes to the path you want to use, move the files to the new directory and restart ddev.
+To change from the default *tests/backstop* path, you can update the `BACKSTOPJS_TESTDIR` variable by running:
+```shell
+ddev dotenv set .ddev/.env.backstopjs --backstopjs-testdir <my/path/relative/to/project/root>
+```
 
-Make sure to remove the #ddev-generated line from the file to prevent ddev from making changes to it.
+Before you start/restart ddev, you should confirm the new directory exists, or Docker will automatically create with the owner set to root. [`healthcheck.sh`](backstopjs-build/healthcheck.sh) will detect this on container start and attempt to update the owner/group to match the rest of ddev; however, it can only update the files/directories the container can see. If this behavior is problematic, you can set `BACKSTOPJS_ALLOW_PERM_REPAIR` to `false` and it will only notify you.

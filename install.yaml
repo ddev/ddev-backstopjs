@@ -1,9 +1,11 @@
-name: ddev-backstopjs
+name: backstopjs
 
 pre_install_actions:
-  - test -d ${DDEV_APPROOT}/tests/backstop || mkdir -p ${DDEV_APPROOT}/tests/backstop
-  - test -f "${DDEV_APPROOT}/tests/backstop/.gitignore" || printf "## ddev-generated\n**/bitmaps_test\n**/html_report\n" > ${DDEV_APPROOT}/tests/backstop/.gitignore
-  - grep -q "## ddev-generated" ${DDEV_APPROOT}/tests/backstop/.gitignore && printf "## ddev-generated\n**/bitmaps_test\n**/html_report\n" > ${DDEV_APPROOT}/tests/backstop/.gitignore || true
+  - test -d .ddev/backstopBuild && ddev add-on remove ddev-backstopjs || exit 0
+  - test -f ${DDEV_APPROOT}/.ddev/.env.backstopjs || ddev dotenv set ${DDEV_APPROOT}/.ddev/.env.backstopjs --backstopjs-testdir tests/backstop --backstopjs-allow-perm-repair true
+  - test -d ${DDEV_APPROOT}/${BACKSTOPJS_TESTDIR} || mkdir -p ${DDEV_APPROOT}/${BACKSTOPJS_TESTDIR}
+  - test -f "${DDEV_APPROOT}/${BACKSTOPJS_TESTDIR}/.gitignore" || printf "## ddev-generated\n**/bitmaps_test\n**/html_report\n" > ${DDEV_APPROOT}/${BACKSTOPJS_TESTDIR}/.gitignore
+  - grep -q "## ddev-generated" ${DDEV_APPROOT}/${BACKSTOPJS_TESTDIR}/.gitignore && printf "## ddev-generated\n**/bitmaps_test\n**/html_report\n" > ${DDEV_APPROOT}/${BACKSTOPJS_TESTDIR}/.gitignore || true
 
 
 # list of files and directories listed that are copied into project .ddev directory
@@ -11,9 +13,9 @@ pre_install_actions:
 # if it hasn't been modified by the user.
 # DDEV environment variables can be interpolated into these filenames
 project_files:
-- docker-compose.backstop.yaml
-- backstopBuild/
-- commands/backstop/backstop
+- docker-compose.backstopjs.yaml
+- backstopjs-build/
+- commands/backstopjs/
 - commands/host/backstop-results
 
 post_install_actions:
@@ -24,4 +26,4 @@ post_install_actions:
 # and prevent add-on from being installed if it doesn't validate.
 # See https://github.com/Masterminds/semver#checking-version-constraints for constraint rules.
 # Available with DDEV v1.23.4+, and works only for DDEV v1.23.4+ binaries
-ddev_version_constraint: '>= v1.24.3'
+ddev_version_constraint: '>= v1.24.5'
