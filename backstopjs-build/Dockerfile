@@ -6,6 +6,10 @@ FROM $BASE_IMAGE
 COPY ./entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
+# Add healthcheck script
+COPY ./healthcheck.sh /healthcheck.sh
+RUN chmod +x /healthcheck.sh
+
 # delete the default 'node' user with uid 1000 and add current ddev user
 ARG username
 ARG uid
