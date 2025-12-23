@@ -2,7 +2,7 @@ name: backstopjs
 
 pre_install_actions:
   - test -d .ddev/backstopBuild && ddev add-on remove ddev-backstopjs || exit 0
-  - test -f ${DDEV_APPROOT}/.ddev/.env.backstopjs || ddev dotenv set ${DDEV_APPROOT}/.ddev/.env.backstopjs --backstopjs-testdir tests/backstop
+  - test -f ${DDEV_APPROOT}/.ddev/.env.backstopjs || ddev dotenv set ${DDEV_APPROOT}/.ddev/.env.backstopjs --backstopjs-testdir tests/backstop --backstopjs-allow-perm-repair true
   - test -d ${DDEV_APPROOT}/${BACKSTOPJS_TESTDIR} || mkdir -p ${DDEV_APPROOT}/${BACKSTOPJS_TESTDIR}
   - test -f "${DDEV_APPROOT}/${BACKSTOPJS_TESTDIR}/.gitignore" || printf "## ddev-generated\n**/bitmaps_test\n**/html_report\n" > ${DDEV_APPROOT}/${BACKSTOPJS_TESTDIR}/.gitignore
   - grep -q "## ddev-generated" ${DDEV_APPROOT}/${BACKSTOPJS_TESTDIR}/.gitignore && printf "## ddev-generated\n**/bitmaps_test\n**/html_report\n" > ${DDEV_APPROOT}/${BACKSTOPJS_TESTDIR}/.gitignore || true
