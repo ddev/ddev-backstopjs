@@ -1,27 +1,22 @@
 name: ddev-backstopjs
 
-pre_install_actions:
-  - test -d ${DDEV_APPROOT}/tests/backstop || mkdir -p ${DDEV_APPROOT}/tests/backstop
-  - test -f "${DDEV_APPROOT}/tests/backstop/.gitignore" || printf "## ddev-generated\n**/bitmaps_test\n**/html_report\ncore\n" > ${DDEV_APPROOT}/tests/backstop/.gitignore
-  - grep -q "## ddev-generated" ${DDEV_APPROOT}/tests/backstop/.gitignore && printf "## ddev-generated\n**/bitmaps_test\n**/html_report\ncore\n" > ${DDEV_APPROOT}/tests/backstop/.gitignore || true
-
-
-# list of files and directories listed that are copied into project .ddev directory
-# Each file should contain #ddev-generated so it can be replaced by a later `ddev get`
-# if it hasn't been modified by the user.
-# DDEV environment variables can be interpolated into these filenames
 project_files:
-- docker-compose.backstop.yaml
-- backstopBuild/
-- commands/backstop/backstop
-- commands/host/backstop-results
+  - docker-compose.backstop.yaml
+  - backstopBuild/
+  - commands/backstop/backstop
+  - commands/host/backstop-results
 
 post_install_actions:
- - echo "Install finished. Please restart ddev with 'ddev restart'"
- - echo "After that create your backstop config, e.g. run ddev backstop init."
+ - |
+   #ddev-description:Create the backstop test directory
+   test -d "${DDEV_APPROOT}/tests/backstop" || mkdir -p "${DDEV_APPROOT}/tests/backstop"
+   test -f "${DDEV_APPROOT}/tests/backstop/.gitignore" || printf "#ddev-generated\n**/bitmaps_test\n**/html_report\ncore\n" > "${DDEV_APPROOT}/tests/backstop/.gitignore"
+   grep -q "#ddev-generated" "${DDEV_APPROOT}/tests/backstop/.gitignore" && printf "#ddev-generated\n**/bitmaps_test\n**/html_report\ncore\n" > "${DDEV_APPROOT}/tests/backstop/.gitignore" || true
+ - |
+   echo "Install finished. Please restart ddev with 'ddev restart'"
+   echo "After that create your backstop config, e.g. 'ddev backstop init'"
 
-# Version constraint for DDEV that will be validated against the running DDEV executable
-# and prevent add-on from being installed if it doesn't validate.
-# See https://github.com/Masterminds/semver#checking-version-constraints for constraint rules.
-# Available with DDEV v1.23.4+, and works only for DDEV v1.23.4+ binaries
-ddev_version_constraint: '>= v1.24.3'
+ddev_version_constraint: '>= v1.24.10'
+
+removal_actions:
+  - rm -rf "${DDEV_APPROOT}/tests/backstop"
