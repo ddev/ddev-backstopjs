@@ -1,7 +1,7 @@
 [![add-on registry](https://img.shields.io/badge/DDEV-Add--on_Registry-blue)](https://addons.ddev.com)
-[![tests](https://github.com/mmunz/ddev-backstopjs/actions/workflows/tests.yml/badge.svg)](https://github.com/mmunz/ddev-backstopjs/actions/workflows/tests.yml)
-[![last commit](https://img.shields.io/github/last-commit/mmunz/ddev-backstopjs)](https://github.com/mmunz/ddev-backstopjs/commits)
-[![release](https://img.shields.io/github/v/release/mmunz/ddev-backstopjs)](https://github.com/mmunz/ddev-backstopjs/releases/latest)
+[![tests](https://github.com/ddev/ddev-backstopjs/actions/workflows/tests.yml/badge.svg)](https://github.com/ddev/ddev-backstopjs/actions/workflows/tests.yml)
+[![last commit](https://img.shields.io/github/last-commit/ddev/ddev-backstopjs)](https://github.com/ddev/ddev-backstopjs/commits)
+[![release](https://img.shields.io/github/v/release/ddev/ddev-backstopjs)](https://github.com/ddev/ddev-backstopjs/releases/latest)
 
 ## ddev-backstopjs
 
@@ -16,7 +16,7 @@ config and for links to a more advanced example config.
 Install this addon with
 
 ```shell
-ddev add-on get mmunz/ddev-backstopjs
+ddev add-on get ddev/ddev-backstopjs
 ```
 
 After that you need to restart the ddev project:
@@ -122,3 +122,9 @@ If you want to change that edit the file [docker-compose.backstop.yaml](docker-c
 change the line in volumes to the path you want to use, move the files to the new directory and restart ddev.
 
 Make sure to remove the #ddev-generated line from the file to prevent ddev from making changes to it.
+
+## Credits
+
+**Contributed and maintained by [@mmunz](https://github.com/mmunz)**
+
+**Maintained by the [DDEV team](https://ddev.com/support-ddev/)**
