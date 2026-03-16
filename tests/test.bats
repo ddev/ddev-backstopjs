@@ -44,6 +44,15 @@ health_checks() {
   run ddev backstop version
   assert_success
   assert_output --partial 'Command "version" successfully executed'
+
+  # openReport and remote commands show an error message
+  run ddev backstop openReport
+  assert_failure
+  assert_output --partial 'This does not work for backstop in DDEV'
+
+  run ddev backstop remote
+  assert_failure
+  assert_output --partial 'This does not work for backstop in DDEV'
 }
 
 teardown() {
@@ -68,13 +77,6 @@ teardown() {
 
   # Check service works
   health_checks
-
-  # openReport and remote commands show an error message
-  set +o pipefail
-  run ddev backstop openReport
-  assert_output --partial 'This does not work for backstop in ddev'
-  run ddev backstop remote
-  assert_output --partial 'This does not work for backstop in ddev'
 }
 
 # bats test_tags=release
