@@ -3,128 +3,104 @@
 [![last commit](https://img.shields.io/github/last-commit/ddev/ddev-backstopjs)](https://github.com/ddev/ddev-backstopjs/commits)
 [![release](https://img.shields.io/github/v/release/ddev/ddev-backstopjs)](https://github.com/ddev/ddev-backstopjs/releases/latest)
 
-## ddev-backstopjs
+## DDEV BackstopJS
 
-This is a ddev-addon for [backstop.js](https://github.com/garris/BackstopJS), a visual regression testing tool.
-Backstop is executed in a docker container based on the official [backstopjs docker image](https://hub.docker.com/r/backstopjs/backstopjs).
+## Overview
 
-This addon just provides the basics to run backstopjs. No backstopjs config is included. See below how to generate a
+[BackstopJS](https://github.com/garris/BackstopJS) is a visual regression testing tool.
+
+This add-on provides the basics to run BackstopJS into your [DDEV](https://ddev.com) project. No backstopjs config is included. See below how to generate a
 config and for links to a more advanced example config.
 
-## Getting started
+## Installation
 
-Install this addon with
-
-```shell
+```bash
 ddev add-on get ddev/ddev-backstopjs
-```
-
-After that you need to restart the ddev project:
-
-```shell
 ddev restart
 ```
 
-**Note: If you haven't downloaded the backstopjs base image before, then it will be downloaded when ddev is restarted.
-The backstopjs/backstopjs is about 2.6GB, so this may take some time.**
+After installation, make sure to commit the `.ddev` directory to version control.
 
+> [!NOTE]
+> If you haven't downloaded the backstopjs base image before, then it will be downloaded when DDEV is restarted.
+> The `backstopjs/backstopjs` is about 2.6 GB, so this may take some time.
 
-## Using backstopjs
+## Usage
 
 ### Configuration
 
-By default, the backstop tests are expected in $DDEV_APPDIR/tests/backstop.
+By default, the backstop tests are expected in `$DDEV_APPROOT/tests/backstop`.
 
-Provide your own backstop.js or backstop.json configs there.
+Provide your own `backstop.js` or `backstop.json` configs there.
 
-Hint: have a look at my example [backstopjs-config](https://github.com/mmunz/backstopjs-config)
+> [!TIP]
+> Have a look at this example for [backstopjs-config](https://github.com/mmunz/backstopjs-config),
 
-Alternatively you can create a simple backstop.json config with:
+Alternatively, create a simple `backstop.json` config with:
 
-```shell
+```bash
 ddev backstop init
 ```
 
 ### Run tests
 
-After the config was created it is time to run the tests:
+After you created the config, you can run the tests.
 
 Create reference screenshots:
 
-```shell
+```bash
 ddev backstop reference
 ```
 
 Create test images and compare to reference screenshots:
 
-```shell
+```bash
 ddev backstop test
 ```
 
-If your config file is not 'backstop.json' you need to use the --config argument, e.g. --config=backstop.js
+If your config file is not `backstop.json`, use the `--config` argument, for example `--config=backstop.js`.
 
 ### View test results
 
-The backstop commands 'backstop remote' and 'backstop openReport' do not work in this setup.
+The BackstopJS commands `backstop remote` and `backstop openReport` don't work in this setup.
 
-But there is a host command that will open the latest test report in your default browser:
+However, there is a host command that opens the latest test report in your default browser:
 
-```shell
+```bash
 ddev backstop-results
 ```
 
-Alternatively open the generated HTML-Report with your browser, e.g.:
+Alternatively, open the generated HTML report in your browser, for example:
 
-```shell
+```bash
 open tests/backstop/backstop_data/_mytestproject_/html_report/index.html
 ```
 
-## Changes to the original docker image
+## Changes to the original Docker image
 
-The backstopjs docker image is extended with some functions using a custom docker build, see [Dockerfile](backstopBuild/Dockerfile)
-and uses a custom [entrypoint](backstopBuild/entrypoint.sh).
+The BackstopJS Docker image is extended with additional functionality using a custom Docker build. See [Dockerfile](backstopBuild/Dockerfile) and the custom [entrypoint](backstopBuild/entrypoint.sh).
 
-In the Dockerfile the following is added/changed:
+In the `Dockerfile`, the following changes are made:
 
-- add the custom entrypoint.sh to the image
-- delete the default 'node' user with uid 1000 and add current ddev user
-- install the [minimist](https://www.npmjs.com/package/minimist) npm package globally. This is not needed by default
-  but very handy to parse command line args for more complex custom backstopjs configs.
+- Add the custom `entrypoint.sh` to the image
+- Delete the default `node` user with UID 1000 and add the current DDEV user
+- Install the [minimist](https://www.npmjs.com/package/minimist) npm package globally. This is not required by default but is useful for parsing command-line arguments in more complex BackstopJS configs.
 
 The entrypoint is responsible for:
 
-- add /etc/hosts entries for all hosts configured in the ddev web container automatically
-- add sleep command to keep the container running
+- Adding `/etc/hosts` entries for all hosts configured in the DDEV web container
+- Adding a `sleep` command to keep the container running
 
-## Advanced
+## Advanced Customization
 
-### How to add additional hostnames?
+### Change the BackstopJS tests directory
 
-If you want to test hosts not configured in the web container, you need to use external_links in the service containers.
-For that add a file `docker-compose.external_links.yaml` to your project which should look like this:
+By default, the `backstop` directory (which contains the BackstopJS config and related files) is expected in your project directory, next to the `.ddev` folder, at `tests/backstop`.
 
-```yaml
-services:
-  backstop:
-    external_links:
-      - "ddev-router:myproject.ddev.site"
-      - "ddev-router:myproject2.ddev.site"
-```
+To change this, edit the file [docker-compose.backstop.yaml](docker-compose.backstop.yaml) and update the path in the `volumes` section. Move your files to the new directory and restart DDEV.
 
-See: [ddev FAQ: Can different projects communicate with each other?](https://ddev.readthedocs.io/en/latest/users/usage/faq/#features-requirements)
-
-
-### Change backstop tests directory
-Per default the backstop directory containing backstop config etc. is expected in your project directory (besides the
-.ddev folder) in the directory *tests/backstop*.
-
-If you want to change that edit the file [docker-compose.backstop.yaml](docker-compose.backstop.yaml) and
-change the line in volumes to the path you want to use, move the files to the new directory and restart ddev.
-
-Make sure to remove the #ddev-generated line from the file to prevent ddev from making changes to it.
+Make sure to remove the `#ddev-generated` line from the file to prevent DDEV from modifying it.
 
 ## Credits
 
 **Contributed and maintained by [@mmunz](https://github.com/mmunz)**
-
-**Maintained by the [DDEV team](https://ddev.com/support-ddev/)**

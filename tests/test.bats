@@ -16,7 +16,7 @@ setup() {
   set -eu -o pipefail
 
   # Override this variable for your add-on:
-  export GITHUB_REPO=mmunz/ddev-backstopjs
+  export GITHUB_REPO=ddev/ddev-backstopjs
 
   TEST_BREW_PREFIX="$(brew --prefix 2>/dev/null || true)"
   export BATS_LIB_PATH="${BATS_LIB_PATH}:${TEST_BREW_PREFIX}/lib:/usr/lib/bats"
@@ -44,12 +44,27 @@ health_checks() {
   run ddev backstop version
   assert_success
   assert_output --partial 'Command "version" successfully executed'
+
+  # openReport and remote commands show an error message
+  run ddev backstop openReport
+  assert_failure
+  assert_output --partial 'This does not work for backstop in DDEV'
+
+  run ddev backstop remote
+  assert_failure
+  assert_output --partial 'This does not work for backstop in DDEV'
 }
 
 teardown() {
   set -eu -o pipefail
-  ddev delete -Oy ${PROJNAME} >/dev/null 2>&1
-  [ "${TESTDIR}" != "" ] && rm -rf ${TESTDIR}
+  ddev delete -Oy "${PROJNAME}" >/dev/null 2>&1
+  # Persist TESTDIR if running inside GitHub Actions. Useful for uploading test result artifacts
+  # See example at https://github.com/ddev/github-action-add-on-test#preserving-artifacts
+  if [ -n "${GITHUB_ENV:-}" ]; then
+    [ -e "${GITHUB_ENV:-}" ] && echo "TESTDIR=${HOME}/tmp/${PROJNAME}" >> "${GITHUB_ENV}"
+  else
+    [ "${TESTDIR}" != "" ] && rm -rf "${TESTDIR}"
+  fi
 }
 
 @test "install from directory" {
@@ -62,13 +77,6 @@ teardown() {
 
   # Check service works
   health_checks
-
-  # openReport and remote commands show an error message
-  set +o pipefail
-  run ddev backstop openReport
-  assert_output --partial 'This does not work for backstop in ddev'
-  run ddev backstop remote
-  assert_output --partial 'This does not work for backstop in ddev'
 }
 
 # bats test_tags=release

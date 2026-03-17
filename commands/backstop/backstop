@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #ddev-generated
 
@@ -8,7 +8,7 @@
 ## ExecRaw: true
 
 if [ "$1" == "openReport" -o "$1" == "remote" ]; then
-  echo "This does not work for backstop in ddev. See ddev backstop-results command."
+  echo "This does not work for backstop in DDEV. See 'ddev backstop-results' command."
   exit 1
 fi
 

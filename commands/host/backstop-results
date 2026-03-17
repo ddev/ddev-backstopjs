@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #ddev-generated
 
@@ -8,12 +8,12 @@
 
 case $OSTYPE in
   linux-gnu)
-    xdg-open ${DDEV_APPROOT}/tests/backstop/backstop_data/html_report/index.html
+    xdg-open "${DDEV_APPROOT}/tests/backstop/backstop_data/html_report/index.html"
     ;;
   "darwin"*)
-    open ${DDEV_APPROOT}/tests/backstop/backstop_data/html_report/index.html
+    open "${DDEV_APPROOT}/tests/backstop/backstop_data/html_report/index.html"
     ;;
   "win*"* | "msys"*)
-    start ${DDEV_APPROOT}/tests/backstop/backstop_data/html_report/index.html
+    start "${DDEV_APPROOT}/tests/backstop/backstop_data/html_report/index.html"
     ;;
 esac
